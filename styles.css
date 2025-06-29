@@ -1,0 +1,174 @@
+/* Styles for the body element to set global layout and appearance */
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+  margin: 0 auto;
+  max-width: 1200px; /* PC limit, unchanged */
+  padding: 20px;
+  background: linear-gradient(135deg, #e0eafc, #cfdef3);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Styles for the main title */
+#title {
+  text-align: center;
+  color: #2c3e50;
+  font-size: 2.5em;
+  margin-bottom: 10px;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Styles for the description paragraph */
+#description {
+  text-align: center;
+  color: #34495e;
+  font-size: 1.1em;
+  margin-bottom: 20px;
+  padding: 0 10px;
+  max-width: 800px; /* PC limit, unchanged */
+  line-height: 1.5;
+}
+
+/* Styles for the survey form container */
+#survey-form {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  max-width: 800px; /* PC limit, unchanged */
+  width: 90%; /* Scales down on smaller screens, adjusted for mobile */
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Styles for all div elements within the form */
+div {
+  margin-bottom: 15px;
+}
+
+/* Styles for all label elements */
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 1em;
+}
+
+/* Styles for text, email, number, dropdown, and textarea inputs */
+#name,
+#email,
+#number,
+#dropdown,
+#comments {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #dfe6e9;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 1em;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#name:focus,
+#email:focus,
+#number:focus,
+#dropdown:focus,
+#comments:focus {
+  border-color: #0984e3;
+  box-shadow: 0 0 8px rgba(9, 132, 227, 0.3);
+  outline: none;
+}
+
+/* Styles for radio and checkbox inputs */
+input[type="radio"],
+input[type="checkbox"] {
+  margin-right: 10px;
+  transform: scale(1.1);
+}
+
+/* Specific styles for the comments textarea */
+#comments {
+  height: 100px;
+  resize: vertical;
+}
+
+/* Styles for the submit button */
+#submit {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(90deg, #0984e3, #00b894);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.1em;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+#submit:hover {
+  background: linear-gradient(90deg, #0870c1, #009e7a);
+  transform: translateY(-2px);
+}
+
+#submit:active {
+  transform: translateY(0);
+}
+
+input[type="radio"] + label,
+input[type="checkbox"] + label {
+  font-weight: 400;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+}
+
+p {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+/* Media query for mobile devices (max-width: 600px) - updated to fill screen */
+@media (max-width: 600px) {
+  #title {
+    font-size: 1.8em;
+  }
+  #description {
+    font-size: 0.9em;
+    max-width: 100%; /* Fills screen width */
+  }
+  #survey-form {
+    padding: 15px;
+    max-width: 100%; /* Fills screen width */
+    width: 100%; /* Ensures no side spaces */
+    margin: 0; /* Removes centering margin */
+  }
+  div {
+    margin-bottom: 10px;
+  }
+  label {
+    font-size: 0.9em;
+  }
+  #comments {
+    height: 80px;
+  }
+  #submit {
+    font-size: 1em;
+  }
+}
+
+/* Media query for tablets and small desktops (min-width: 601px and max-width: 900px) */
+@media (min-width: 601px) and (max-width: 900px) {
+  #survey-form {
+    max-width: 70%;
+  }
+  #description {
+    max-width: 80%;
+  }
+}

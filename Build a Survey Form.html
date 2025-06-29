@@ -1,0 +1,149 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!-- Declares the document type as HTML5 -->
+<!DOCTYPE html>
+<!-- Defines the root element with English language setting -->
+<html lang="en">
+  <!-- Head section contains metadata and external resources -->
+  <head>
+    <!-- Specifies UTF-8 character encoding for proper text rendering -->
+    <meta charset="UTF-8">
+    <!-- Ensures responsive viewport for mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Sets the page title displayed in the browser tab -->
+    <title>Your Feedback Matters!</title>
+    <!-- Links to external CSS stylesheet for styling -->
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <!-- Body section contains the visible content of the page -->
+  <body>
+    <!-- Main heading for the survey form -->
+    <h1 id="title">Your Feedback Matters!</h1>
+    <!-- Shortened description paragraph for better mobile fit -->
+    <p id="description">Share your thoughts to help us improve. This quick survey captures your preferences and experiences.</p>
+    <!-- Form element to collect user input, configured to send data to Formspree -->
+    <form id="survey-form" action="https://formspree.io/f/mzzgozbr" method="POST">
+      <!-- Container for name input field -->
+      <div>
+        <!-- Label for name input, with ID for styling -->
+        <label id="name-label">Name and Surname
+          <!-- Text input for user's name, required for submission, with name attribute for Formspree -->
+          <input id="name" name="name" type="text" placeholder="Coco McMahon" required>
+        </label>
+      </div>
+      <!-- Container for email input field -->
+      <div>
+        <!-- Label for email input, with ID for styling -->
+        <label id="email-label">Email Address
+          <!-- Email input for user's email, required for submission, with name attribute for Formspree -->
+          <input id="email" name="email" type="email" placeholder="Coco@gmail.com" required>
+        </label>
+      </div>
+      <!-- Container for age input field -->
+      <div>
+        <!-- Label for age input, with ID for styling -->
+        <label id="number-label">Age in years
+          <!-- Number input for user's age, with min and max constraints, with name attribute for Formspree -->
+          <input id="number" name="age" type="number" placeholder="18" min="16" max="100">
+        </label>
+      </div>
+      <!-- Container for dropdown selection -->
+      <div>
+        <!-- Label for dropdown menu -->
+        <label>What best describes your current role?
+          <!-- Dropdown menu for selecting employment status, with name attribute for Formspree -->
+          <select id="dropdown" name="role">
+            <!-- Default option prompting user to select -->
+            <option value="">select (one)</option>
+            <!-- Option for unemployed status -->
+            <option value="unemployed">Unemployed</option>
+            <!-- Option for employed status -->
+            <option value="employed">Employed</option>
+            <!-- Option for other status -->
+            <option value="other">Other</option>
+          </select>
+        </label>
+      </div>
+      <!-- Container for radio button group -->
+      <div>
+        <!-- Question prompting user about likelihood of returning -->
+        <p>How likely are you to come back?</p>
+        <!-- Radio button for "Very likely" option, with name attribute for Formspree -->
+        <label>
+          <input type="radio" value="very-likely" name="recommend"> Very likely
+        </label>
+        <!-- Radio button for "Less likely" option, with name attribute for Formspree -->
+        <label>
+          <input type="radio" value="less-likely" name="recommend"> Less likely
+        </label>
+        <!-- Radio button for "I'd rather not say" option, with name attribute for Formspree -->
+        <label>
+          <input type="radio" value="no-comment" name="recommend"> I'd rather not say
+        </label>
+      </div>
+      <!-- Container for checkbox group -->
+      <div>
+        <!-- Question prompting user about areas for improvement -->
+        <p>Which areas would you like improvement?</p>
+        <!-- Checkbox for staff behaviour improvement, with name attribute for Formspree (multiple selections allowed) -->
+        <label>
+          <input type="checkbox" value="staff-behaviour" name="improvements"> Staff behaviour
+        </label>
+        <!-- Checkbox for order times improvement, with name attribute for Formspree (multiple selections allowed) -->
+        <label>
+          <input type="checkbox" value="order-times" name="improvements"> Order times
+        </label>
+      </div>
+      <!-- Container for additional comments textarea -->
+      <div>
+        <!-- Label for comments textarea -->
+        <label>Additional Comments
+          <!-- Textarea for users to enter additional feedback, with name attribute for Formspree -->
+          <textarea id="comments" name="comments"></textarea>
+        </label>
+      </div>
+      <!-- Container for submit button -->
+      <div>
+        <!-- Submit button to send form data to Formspree -->
+        <button id="submit" type="submit">Submit</button>
+      </div>
+    </form>
+  </body>
+</html>
